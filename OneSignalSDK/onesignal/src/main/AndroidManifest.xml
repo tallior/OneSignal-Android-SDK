@@ -61,8 +61,10 @@
 
     <application>
 
-        <receiver android:name="com.onesignal.NotificationOpenedReceiver"
-            android:exported="true" />
+        <activity
+            android:name="com.onesignal.NotificationOpenedReceiver"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <service
             android:name="com.onesignal.HmsMessageServiceOneSignal"
@@ -99,6 +101,8 @@
                   android:theme="@android:style/Theme.Translucent.NoTitleBar" android:exported="true"  />
 
         <service android:name="com.onesignal.NotificationRestoreService" android:exported="true"  />
+
+        <receiver android:name="com.onesignal.NotificationDismissReceiver" />
 
         <receiver android:name="com.onesignal.BootUpReceiver" android:exported="true" >
             <intent-filter>

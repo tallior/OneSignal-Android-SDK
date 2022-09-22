@@ -31,6 +31,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -2232,7 +2233,7 @@ public class OneSignal {
    }
 
    // Called when opening a notification
-   public static void handleNotificationOpen(Context inContext, JSONArray data, boolean fromAlert, @Nullable String notificationId) {
+   public static void handleNotificationOpen(Activity inContext, JSONArray data, boolean fromAlert, @Nullable String notificationId) {
 
       //if applicable, check if the user provided privacy consent
       if (shouldLogUserPrivacyConsentErrorMessageForMethodName(null))
@@ -2259,12 +2260,16 @@ public class OneSignal {
       runNotificationOpenedCallback(data, true, fromAlert);
    }
 
-   static boolean startOrResumeApp(Context inContext) {
+   static boolean startOrResumeApp(Activity inContext) {
       Intent launchIntent = inContext.getPackageManager().getLaunchIntentForPackage(inContext.getPackageName());
       // Make sure we have a launcher intent.
       if (launchIntent != null) {
-         launchIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
-         inContext.startActivity(launchIntent);
+         if (inContext.isTaskRoot()) {
+            inContext.startActivity(launchIntent);
+         } else {
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent.getActivity(inContext, 0, launchIntent, 0);
+         }
          return true;
       }
       return false;
@@ -2277,7 +2282,7 @@ public class OneSignal {
     * 4. App is coming from the background
     * 5. App open/resume intent exists
     */
-   private static boolean shouldInitDirectSessionFromNotificationOpen(Context context, boolean fromAlert, boolean urlOpened, boolean defaultOpenActionDisabled) {
+   private static boolean shouldInitDirectSessionFromNotificationOpen(Activity context, boolean fromAlert, boolean urlOpened, boolean defaultOpenActionDisabled) {
       return !fromAlert
               && !urlOpened
               && !defaultOpenActionDisabled
