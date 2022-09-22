@@ -98,7 +98,7 @@ class OneSignalSyncServiceUtils {
          context,
          SYNC_TASK_ID,
          new Intent(context, SyncService.class),
-         PendingIntent.FLAG_UPDATE_CURRENT
+              PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
       );
    }
 

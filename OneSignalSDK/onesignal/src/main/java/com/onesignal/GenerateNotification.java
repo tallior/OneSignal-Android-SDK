@@ -192,8 +192,8 @@ class GenerateNotification {
 
    private static PendingIntent getNewActionPendingIntent(int requestCode, Intent intent) {
       if (openerIsBroadcast)
-         return PendingIntent.getBroadcast(currentContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-      return PendingIntent.getActivity(currentContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+         return PendingIntent.getBroadcast(currentContext, requestCode, intent,  PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+      return PendingIntent.getActivity(currentContext, requestCode, intent,  PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
    }
 
    private static Intent getNewBaseIntent(int notificationId) {
