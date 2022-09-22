@@ -2268,7 +2268,7 @@ public class OneSignal {
             inContext.startActivity(launchIntent);
          } else {
             launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent.getActivity(inContext, 0, launchIntent, 0);
+            PendingIntent.getActivity(inContext, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE);
          }
          return true;
       }
